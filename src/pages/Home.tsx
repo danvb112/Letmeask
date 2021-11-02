@@ -1,5 +1,7 @@
 
 import { useHistory } from 'react-router-dom'
+import { auth } from '../services/firebase'
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import illustrationImg from '../assets/images/illustration.svg';
 import logoImg from '../assets/images/logo.svg';
 import googleIcon from '../assets/images/google-icon.svg';
@@ -11,7 +13,15 @@ export function Home() {
     const history = useHistory();
 
     function navigateToNewRoom() {
-        history.push('/rooms/new');
+        var provider = new GoogleAuthProvider();
+
+        signInWithPopup(auth,provider).then(result => {
+            console.log(result);
+
+            history.push('/rooms/new');
+        });
+
+        
     }
 
     return (

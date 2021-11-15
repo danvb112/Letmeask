@@ -38,7 +38,7 @@ export function NewRoom() {
 
         updates['/rooms/' + newPostKey] = postData;
 
-        update(roomRef, updates);
+        await update(roomRef, updates);
 
         history.push(`/rooms/${newPostKey}`);
     }

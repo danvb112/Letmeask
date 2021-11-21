@@ -1,5 +1,5 @@
-import { child, push, ref, update } from '@firebase/database';
-import { useState, FormEvent } from 'react';
+import { child, onValue, push, ref, update } from '@firebase/database';
+import { useState, FormEvent, useEffect } from 'react';
 import { useParams } from 'react-router-dom'
 
 import logoImg from '../assets/images/logo.svg';
@@ -9,6 +9,27 @@ import { useAuth } from '../hooks/useAuth';
 import { database } from '../services/firebase';
 
 import '../styles/room.scss'
+
+type FirebaseQuestions = Record<string , {
+    author: {
+        name: string;
+        avatar: string;
+    }
+    content: string;
+    isAnswered: boolean;
+    isHighlighted: boolean;
+}>
+
+type Question = {
+    id: string
+    author: {
+        name: string;
+        avatar: string;
+    }
+    content: string;
+    isAnswered: boolean;
+    isHighlighted: boolean;
+}
 
 type ParamsProps = {
     id: string
@@ -20,8 +41,32 @@ export function Room() {
 
     const params = useParams<ParamsProps>()
     const [newQuestion, setNewQuestion] = useState('');
+    const [questions, setQuestions] = useState<Question[]>([]);
+    const [title, setTitle] = useState('');
 
     const roomId = params.id
+
+    useEffect(() => {
+        const roomRef = ref(database, `rooms/${roomId}`);
+        
+        onValue(roomRef, room => {
+            const databaseRoom = room.val();
+            const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {};
+
+            const parsedQuestions = Object.entries(firebaseQuestions).map(([key, value]) => {
+                return {
+                    id: key,
+                    content: value.content,
+                    author: value.author,
+                    isHighlighted: value.isHighlighted,
+                    isAnswered: value.isAnswered
+                }
+            });
+
+            setTitle(databaseRoom.title);
+            setQuestions(parsedQuestions);
+        })
+    }, [roomId]);
 
     async function handleSendNewQuestion(event: FormEvent) {
         event.preventDefault();
@@ -69,8 +114,8 @@ export function Room() {
             
             <main>
                 <div className="room-title">
-                    <h1>Sala React</h1>
-                    <span>4 Perguntas</span>
+                    <h1>Sala {title}</h1>
+                    {questions.length > 0 && (<span>{questions.length} Pergunta(s)</span>)}
                 </div>
 
                 <form onSubmit={handleSendNewQuestion}>
@@ -92,6 +137,7 @@ export function Room() {
                         <Button type="submit" disabled={!user}>Enviar pergunta</Button>
                     </div>
                 </form>
+                {JSON.stringify(questions)}
             </main>
         </div>
     );

@@ -77,7 +77,7 @@ export function AdminRoom() {
                 </div>
                 
                 <div className="question-list">
-                    {questions.map(question => {
+                    {questions?.map(question => {
                         return <Question 
                             key={question.id}
                             content={question.content}

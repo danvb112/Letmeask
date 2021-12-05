@@ -40,7 +40,7 @@ export function NewRoom() {
 
         await update(roomRef, updates);
 
-        history.push(`/rooms/${newPostKey}`);
+        history.push(`/admin/rooms/${newPostKey}`);
     }
 
     return (

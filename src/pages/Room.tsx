@@ -11,7 +11,6 @@ import { database } from '../services/firebase';
 import '../styles/room.scss';
 
 
-
 type ParamsProps = {
     id: string
 }

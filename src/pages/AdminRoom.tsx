@@ -1,19 +1,17 @@
+import { ref, remove, update } from '@firebase/database';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import answerImg from '../assets/images/answer.svg';
+import chekcImg from '../assets/images/check.svg';
+import deleteImg from '../assets/images/delete.svg';
 import logoImg from '../assets/images/logo.svg';
 import { Button } from '../components/Button';
 import { Question } from '../components/Question';
 import { RoomCode } from '../components/RoomCode';
 import { useAuth } from '../hooks/useAuth';
 import { useRoom } from '../hooks/useRoom';
-import '../styles/room.scss';
-
-import deleteImg from '../assets/images/delete.svg';
-import answerImg from '../assets/images/answer.svg';
-import chekcImg from '../assets/images/check.svg';
-import { ref, remove, update } from '@firebase/database';
 import { database } from '../services/firebase';
-
+import '../styles/room.scss';
 
 
 type ParamsProps = {

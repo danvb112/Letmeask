@@ -1,8 +1,8 @@
-import {ReactNode} from 'react'
-
 import classnames from 'classnames';
-
+import { ReactNode } from 'react';
 import '../styles/question.scss';
+
+
 
 interface QuestionProps {
     content: string;
